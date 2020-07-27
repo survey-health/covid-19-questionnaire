@@ -8,6 +8,7 @@ import GridQuestionnaire from './components/GridQuestionnaire';
 import SignIn from './components/SignIn';
 import Snackbars from './components/Snackbars';
 import SignInDob from './components/SignInDob';
+import Maintenance from "./components/Maintenance";
 
 export type User = {
     id: string;
@@ -36,6 +37,7 @@ function App() {
     const [token, setToken] = useState<string | undefined>(undefined);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity] = useState<"success" | "info" | "warning" | "error" | undefined>('error');
+    const [maintenance, setMaintenance] = useState<string | undefined>(process.env.REACT_APP_MAINTENANCE);
 
     const getUser = useCallback(async () => {
         setUser(null);
@@ -45,6 +47,11 @@ function App() {
         const data = await response.json();
 
         if (200 !== response.status || data.length <= 0) {
+            if (503 === response.status) {
+                setMaintenance(data.message);
+                return;
+            }
+
             setSnackbarMessage('There was an error retrieving the user.');
             setSnackbarOpen(true);
             return;
@@ -88,6 +95,13 @@ function App() {
         })
 
         if (200 !== response.status) {
+            if (503 === response.status) {
+                try {
+                    const data = await response.json();
+                    setMaintenance(data.message);
+                    return;
+                } catch (e) { }
+            }
             setSnackbarMessage(401 === response.status ? 'Invalid id or date of birth.' : 'There was an error signing you in.');
             setSnackbarOpen(true);
             return;
@@ -132,11 +146,16 @@ function App() {
         }
     }, [user, getQuestionnaire]);
 
+    const displaySignIn = (method: string) : boolean => {
+        return !maintenance && !authConfirmed && process.env.REACT_APP_AUTH_MODE === method;
+    }
+
     return (
         <Container maxWidth="md">
             <CssBaseline />
-            {!authConfirmed && process.env.REACT_APP_AUTH_MODE === 'AD' && <SignIn signIn={signIn} />}
-            {!authConfirmed && process.env.REACT_APP_AUTH_MODE === 'DOB' && <SignInDob signIn={signInDob} />}
+            {maintenance && <Maintenance message={maintenance} />}
+            {displaySignIn('AD') && <SignIn signIn={signIn} />}
+            {displaySignIn('DOB') && <SignInDob signIn={signInDob} />}
             <Snackbars severity={snackbarSeverity} open={snackbarOpen} setOpen={setSnackbarOpen} message={snackbarMessage} />
             {(authConfirmed && null !== user && null !== questionnaire && !questionnaire.isComplete && undefined !== token) && <GridQuestionnaire
                 userType={user.type}
