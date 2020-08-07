@@ -101,6 +101,10 @@ export const useStyles = makeStyles(theme => ({
     },
     questionText: {
         color: '#00006E',
+        'white-space': 'pre-line',
+    },
+    questionSubText: {
+        'white-space': 'pre-line',
     },
     errorText: {
         color: 'red',

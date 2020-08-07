@@ -37,7 +37,7 @@ const QuestionNumber = ({ question, setAnswerForQuestion}: Props) => {
         <>
             <Grid item xs={12} sm={9}>
                 <Typography className={classes.questionText} variant={'h5'} align={'left'}>{question.number}. {question.text}</Typography>
-                {question.subText && <Typography>{question.subText}</Typography>}
+                {question.subText && <Typography className={classes.questionSubText}>{question.subText}</Typography>}
             </Grid>
             <Grid item xs={12} sm={3} className={classes.buttons}>
                 <TextField
