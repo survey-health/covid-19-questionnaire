@@ -29,8 +29,22 @@ export type Questionnaire = {
     recid: string;
 };
 
+export type Question = {
+    id: string;
+    number: number;
+    text: string;
+    subText: string;
+    type: string;
+    multipleAnswers: string[];
+    maxAcceptable?: number;
+    maxValid?: number;
+    minAcceptable?: number;
+    minValid?: number;
+};
+
 function App() {
     const [user, setUser] = useState<User | null>(null);
+    const [questions, setQuestions] = useState<Question[] | null>(null);
     const [questionnaire, setQuestionnaire] = useState<Questionnaire | null>(null);
     const [authConfirmed, setAuthConfirmed] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -42,11 +56,14 @@ function App() {
     const getUser = useCallback(async () => {
         setUser(null);
 
-        const url = new URL('/v1/user/', apiEndpoint);
+        let url = new URL('/v1/user/', apiEndpoint);
         const response = await apiFetch(url.toString(), {}, token);
         const data = await response.json();
+        url = new URL('/v1/user/questions', apiEndpoint);
+        const questionsResponse = await apiFetch(url.toString(), {}, token);
+        const questions = await questionsResponse.json();
 
-        if (200 !== response.status || data.length <= 0) {
+        if (200 !== response.status || data.length <= 0 || 200 !== questionsResponse.status || questions.length === 0) {
             if (503 === response.status) {
                 setMaintenance(data.message);
                 return;
@@ -57,6 +74,7 @@ function App() {
             return;
         }
 
+        setQuestions(questions);
         setUser(data[0]);
     }, [token]);
 
@@ -157,14 +175,14 @@ function App() {
             {displaySignIn('AD') && <SignIn signIn={signIn} />}
             {displaySignIn('DOB') && <SignInDob signIn={signInDob} />}
             <Snackbars severity={snackbarSeverity} open={snackbarOpen} setOpen={setSnackbarOpen} message={snackbarMessage} />
-            {(authConfirmed && null !== user && null !== questionnaire && !questionnaire.isComplete && undefined !== token) && <GridQuestionnaire
+            {(authConfirmed && null !== user && null !== questionnaire && !questionnaire.isComplete && undefined !== token && questions) && <GridQuestionnaire
                 userType={user.type}
-                questionnaire={questionnaire}
                 user={user}
                 setUser={setUser}
                 setSnackbarOpen={setSnackbarOpen}
                 setSnackbarMessage={setSnackbarMessage}
                 token={token}
+                questions={questions}
             />}
             {(authConfirmed && null !== user && null !== questionnaire && questionnaire.isComplete) && <AlreadyCompletedDialog setUser={setUser} />}
         </Container>
