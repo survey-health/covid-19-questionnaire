@@ -1,17 +1,17 @@
 import {Grid, Typography, TextField} from '@material-ui/core';
+import React, {useState, ReactElement} from 'react';
 import {Question} from '../App';
-import React, { useState } from 'react';
-import { useStyles, Answer} from './GridQuestionnaire';
+import {useStyles, Answer} from './GridQuestionnaire';
 
 type Props = {
     question : Question;
-    setAnswerForQuestion : (answer: Answer) => void;
+    setAnswerForQuestion : (answer : Answer) => void;
 };
 
-const QuestionNumber = ({ question, setAnswerForQuestion}: Props) => {
+const QuestionNumber = ({question, setAnswerForQuestion} : Props) : ReactElement => {
     const classes = useStyles();
     const [questionAnswer, setQuestionAnswer] = useState<string>('');
-    const setAnswer = (val : string) :void => {
+    const setAnswer = (val : string) : void => {
         let unAcceptable = false;
 
         if (question.maxAcceptable !== undefined && question.minAcceptable !== undefined) {
@@ -29,8 +29,8 @@ const QuestionNumber = ({ question, setAnswerForQuestion}: Props) => {
 
     let inValid = false;
 
-    if (question.minValid !== undefined && question.maxValid !== undefined) {
-        inValid = parseFloat(questionAnswer!) < question.minValid || parseFloat(questionAnswer!) > question.maxValid;
+    if (questionAnswer !== undefined && question.minValid !== undefined && question.maxValid !== undefined) {
+        inValid = parseFloat(questionAnswer) < question.minValid || parseFloat(questionAnswer) > question.maxValid;
     }
 
     return (
@@ -42,7 +42,7 @@ const QuestionNumber = ({ question, setAnswerForQuestion}: Props) => {
             <Grid item xs={12} sm={3} className={classes.buttons}>
                 <TextField
                     variant="outlined"
-                    style={{ width: "100%" }}
+                    style={{width: "100%"}}
                     error={inValid}
                     value={questionAnswer} 
                     onChange={e => setAnswer(e.target.value)}

@@ -1,15 +1,14 @@
-import { Grid, Hidden, Typography } from '@material-ui/core';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
+import {Grid, Hidden, Typography} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import React from 'react';
-import { User } from '../App';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import React, {ReactElement} from 'react';
+import {User} from '../App';
 
 const theme = createMuiTheme({
     overrides: {
@@ -23,7 +22,7 @@ const theme = createMuiTheme({
     }
 })
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
     dialogBody: {
         textAlign: 'center'
     },
@@ -33,17 +32,15 @@ const useStyles = makeStyles(theme => ({
         color: 'white',
         fontWeight: 800,
     },
-}));
+});
 
 type Props = {
-    open: boolean;
-    setOpen: (open: boolean) => void;
-    setUser: (user: User | null) => void;
-    studentName: string,
-    date: Date;
+    open : boolean;
+    setOpen : (open : boolean) => void;
+    setUser : (user : User | null) => void;
 };
 
-export default function CheckedInDialog({ studentName, date, open, setOpen, setUser }: Props) {
+const CheckedInDialog = ({open, setOpen, setUser} : Props) : ReactElement => {
     const classes = useStyles();
 
     const handleClose = () => {
@@ -64,27 +61,29 @@ export default function CheckedInDialog({ studentName, date, open, setOpen, setU
         maxWidth="md"
         fullWidth
     >
-        <DialogTitle id="alert-dialog-title" style={{ textAlign: 'center' }} disableTypography><Typography variant={'h6'} style={{ fontWeight: 700 }}>Check In Confirmed</Typography></DialogTitle>
-        <DialogContent style={{ overflow: "hidden" }}>
+        <DialogTitle id="alert-dialog-title" style={{textAlign: 'center'}} disableTypography><Typography variant={'h6'} style={{fontWeight: 700}}>Check In Confirmed</Typography></DialogTitle>
+        <DialogContent style={{overflow: "hidden"}}>
             <Grid container spacing={3}>
-                <Grid item sm={2} xs={12} style={{ textAlign: 'center' }}>
-                    <CheckCircleIcon style={{ height: '80px', width: '80px' }} />
+                <Grid item sm={2} xs={12} style={{textAlign: 'center'}}>
+                    <CheckCircleIcon style={{height: '80px', width: '80px'}}/>
                 </Grid>
-                <Grid item sm={8} xs={12} style={{ textAlign: 'center' }}>
-                    <Typography style={{ textAlign: 'center' }}>Thank you for completing the health questionnaire. <br /></Typography>
-                    <Typography style={{ textAlign: 'center' }}>We look forward to seeing you at school today!</Typography>
+                <Grid item sm={8} xs={12} style={{textAlign: 'center'}}>
+                    <Typography style={{textAlign: 'center'}}>Thank you for completing the health questionnaire. <br/></Typography>
+                    <Typography style={{textAlign: 'center'}}>We look forward to seeing you at school today!</Typography>
                 </Grid>
-                <Hidden xsDown >
-                    <Grid item sm={2} xs={12} style={{ textAlign: 'center' }}>
-                        <CheckCircleIcon style={{ height: '80px', width: '80px' }} />
+                <Hidden xsDown>
+                    <Grid item sm={2} xs={12} style={{textAlign: 'center'}}>
+                        <CheckCircleIcon style={{height: '80px', width: '80px'}}/>
                     </Grid>
                 </Hidden>
             </Grid>
         </DialogContent>
-        <DialogActions style={{ justifyContent: 'center' }}>
+        <DialogActions style={{justifyContent: 'center'}}>
             <MuiThemeProvider theme={theme}>
                 <Button onClick={handleClose} disableRipple>Ok</Button>
             </MuiThemeProvider>
         </DialogActions>
     </Dialog>;
 }
+
+export default CheckedInDialog;

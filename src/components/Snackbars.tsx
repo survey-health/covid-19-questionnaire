@@ -1,47 +1,48 @@
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import { Theme, makeStyles } from '@material-ui/core/styles';
-
-import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
+import {Theme, makeStyles} from '@material-ui/core/styles';
+import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
+import React, {ReactElement} from 'react';
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+const Alert = (props : AlertProps) : ReactElement => {
+    return <MuiAlert elevation={6} variant="filled" {...props}/>;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
+const useStyles = makeStyles((theme : Theme) => ({
+    root: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
     },
-  },
 }));
 
 type Props = {
-  open: boolean;
-  message: string;
-  severity: "success" | "info" | "warning" | "error" | undefined;
-  setOpen: (open: boolean) => void;
+  open : boolean;
+  message : string;
+  severity : "success" | "info" | "warning" | "error" | undefined;
+  setOpen : (open : boolean) => void;
 };
 
-export default function Snackbars({ open, setOpen, message, severity }: Props) {
-  const classes = useStyles();
+const Snackbars = ({open, setOpen, message, severity} : Props) : ReactElement => {
+    const classes = useStyles();
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    const handleClose = (event ?: React.SyntheticEvent, reason ?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
 
-    setOpen(false);
-  };
+        setOpen(false);
+    };
 
-  return (
-    <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity}>
-          {message}
-        </Alert>
-      </Snackbar>
-    </div>
-  );
+    return (
+        <div className={classes.root}>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity={severity}>
+                    {message}
+                </Alert>
+            </Snackbar>
+        </div>
+    );
 }
+
+export default Snackbars;
