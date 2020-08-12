@@ -1,13 +1,12 @@
-import { Button, Grid, Paper, Typography } from '@material-ui/core';
-import {Question, User} from '../App';
-import React, { useCallback, useState } from 'react';
-import { apiEndpoint, apiFetch } from '../utils/api';
-
-import CheckedInDialog from './CheckedInDialog';
-import WarningDialog from './WarningDialog';
+import {Button, Grid, Paper, Typography} from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import QuestionYesNo from "./QuestionYesNo";
+import React, {useCallback, useState, ReactElement} from 'react';
+import {Question, User} from '../App';
+import {apiEndpoint, apiFetch} from '../utils/api';
+import CheckedInDialog from './CheckedInDialog';
 import QuestionNumber from "./QuestionNumber";
+import QuestionYesNo from "./QuestionYesNo";
+import WarningDialog from './WarningDialog';
 
 export const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('xs')]: {
@@ -112,26 +111,25 @@ export const useStyles = makeStyles(theme => ({
 }));
 
 export type Answer = {
-    questionId: string;
-    yes: boolean;
-    type: string;
-    number?: number;
+    questionId : string;
+    yes : boolean;
+    type : string;
+    number ?: number;
 }
 
-const SELECT_TYPE = 'Multiple Values';
 const NUMBER_TYPE = 'Number';
 
 type Props = {
-    user: User;
-    userType: string;
-    token: string;
-    setUser: (user: User | null) => void;
-    setSnackbarOpen: (snackbarOpen: boolean) => void;
-    setSnackbarMessage: (snackbarMessage: string) => void;
+    user : User;
+    userType : string;
+    token : string;
+    setUser : (user : User | null) => void;
+    setSnackbarOpen : (snackbarOpen : boolean) => void;
+    setSnackbarMessage : (snackbarMessage : string) => void;
     questions : Question[];
 };
 
-const GridQuestionnaire = ({ user, setUser, userType, setSnackbarOpen, setSnackbarMessage, token, questions}: Props) => {
+const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackbarMessage, token, questions} : Props) : ReactElement => {
     const classes = useStyles();
 
     const [answers, setAnswers] = useState<Answer[]>([]);
@@ -139,7 +137,7 @@ const GridQuestionnaire = ({ user, setUser, userType, setSnackbarOpen, setSnackb
     const [showCheckedInDialog, setShowCheckedInDialog] = useState(false);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-    const setAnswerForQuestion = (answer: Answer) : void => {
+    const setAnswerForQuestion = (answer : Answer) : void => {
         const inArray = answers.find((arrayAnswer, idx) => {
             if (arrayAnswer.questionId === answer.questionId) {
                 answers[idx] = answer;
@@ -164,7 +162,7 @@ const GridQuestionnaire = ({ user, setUser, userType, setSnackbarOpen, setSnackb
         if (answers.length === questions.length) {
             updateQuestionnaire();
 
-            let hasYes = answers.find((answer) => {
+            const hasYes = answers.find((answer) => {
                 return answer.yes
             });
 
@@ -192,7 +190,7 @@ const GridQuestionnaire = ({ user, setUser, userType, setSnackbarOpen, setSnackb
             }),
         }, token)
 
-        if (204 !== response.status) {
+        if (response.status !== 204) {
             setSnackbarOpen(true);
             setSnackbarMessage('There was an error processing your request.');
         }
@@ -200,16 +198,16 @@ const GridQuestionnaire = ({ user, setUser, userType, setSnackbarOpen, setSnackb
 
     const questionOptions = questions.map((question) => {
         switch(question.type) {
-            case NUMBER_TYPE:
-                return <QuestionNumber key={question.id} question={question} setAnswerForQuestion={setAnswerForQuestion} />;
-            default:
-                return <QuestionYesNo key={question.id} question={question} setAnswerForQuestion={setAnswerForQuestion} />;
+        case NUMBER_TYPE:
+            return <QuestionNumber key={question.id} question={question} setAnswerForQuestion={setAnswerForQuestion}/>;
+        default:
+            return <QuestionYesNo key={question.id} question={question} setAnswerForQuestion={setAnswerForQuestion}/>;
         }
     });
 
     return (
         <Paper variant="outlined" className={classes.paper}>
-            <div style={{ textAlign: 'center' }}><img src={"/logos/SchoolLogo-" + user.schoolId + ".png"} className={classes.logo} alt="School or District Logo" /></div>
+            <div style={{textAlign: 'center'}}><img src={"/logos/SchoolLogo-" + user.schoolId + ".png"} className={classes.logo} alt="School or District Logo"/></div>
             <Typography variant={'h5'} className={classes.headerBold}>{user.name} ({user.id}) - {(new Date()).toLocaleDateString()}</Typography>
             <Typography variant={'h5'} className={classes.headerBold}>Have you experienced any of the following?</Typography>
 
@@ -231,9 +229,9 @@ const GridQuestionnaire = ({ user, setUser, userType, setSnackbarOpen, setSnackb
                     </Button>
                 </Grid>
             </Grid>
-            <WarningDialog user={user} open={showWarningDialog} setOpen={setShowWarningDialog} setUser={setUser} />
-            <CheckedInDialog studentName={user.name} date={new Date()} open={showCheckedInDialog}
-                setOpen={setShowCheckedInDialog} setUser={setUser} />
+            <WarningDialog user={user} open={showWarningDialog} setOpen={setShowWarningDialog} setUser={setUser}/>
+            <CheckedInDialog open={showCheckedInDialog}
+                setOpen={setShowCheckedInDialog} setUser={setUser}/>
         </Paper>
     );
 };

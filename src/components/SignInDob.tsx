@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
 
+import {Paper} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Paper } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useState, ReactElement} from 'react';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -37,10 +37,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = {
-    signIn: (idNumber: string, dob: string) => Promise<void>;
+    signIn : (idNumber : string, dob : string) => Promise<void>;
 };
 
-export default function SignInDob({ signIn }: Props) {
+const SignInDob = ({signIn} : Props) : ReactElement => {
     const classes = useStyles();
     const [idNumber, setIdNumber] = useState('');
     const [dob, setDob] = useState('');
@@ -49,8 +49,8 @@ export default function SignInDob({ signIn }: Props) {
         signIn(idNumber, dob);
     }
 
-    const checkSubmit = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if ('Enter' === e.key) {
+    const checkSubmit = (e : React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter') {
             e.preventDefault();
             signIn(idNumber, dob);
         }
@@ -58,15 +58,15 @@ export default function SignInDob({ signIn }: Props) {
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
+            <CssBaseline/>
             <Paper className={classes.paper}>
-                <Typography component="h1" variant="h5" style={{ fontWeight: 700 }}>
+                <Typography component="h1" variant="h5" style={{fontWeight: 700}}>
                     COVID-19 Daily
                 </Typography>
-                <Typography component="h1" variant="h5" style={{ fontWeight: 700 }}>
+                <Typography component="h1" variant="h5" style={{fontWeight: 700}}>
                     Self-Certification Survey
                 </Typography>
-                <img src={"/logos/DistrictLogo.png"} className={classes.logo} alt="District Logo" />
+                <img src={"/logos/DistrictLogo.png"} className={classes.logo} alt="District Logo"/>
                 <form className={classes.form} noValidate>
                     <TextField
                         variant="outlined"
@@ -109,3 +109,5 @@ export default function SignInDob({ signIn }: Props) {
         </Container>
     );
 }
+
+export default SignInDob;

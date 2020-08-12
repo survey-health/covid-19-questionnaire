@@ -1,10 +1,10 @@
-import React from 'react';
 
+import {Paper} from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Paper } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {ReactElement} from 'react';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -35,23 +35,23 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = {
-    message: string;
+    message : string;
 };
 
-export default function Maintenance({ message }: Props) {
+const Maintenance = ({message} : Props) : ReactElement => {
     const classes = useStyles();
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
+            <CssBaseline/>
             <Paper className={classes.paper}>
-                <Typography component="h1" variant="h5" style={{ fontWeight: 700 }}>
+                <Typography component="h1" variant="h5" style={{fontWeight: 700}}>
                     COVID-19 Daily
                 </Typography>
-                <Typography component="h1" variant="h5" style={{ fontWeight: 700 }}>
+                <Typography component="h1" variant="h5" style={{fontWeight: 700}}>
                     Self-Certification Survey
                 </Typography>
-                <img src={"/logos/DistrictLogo.png"} className={classes.logo} alt="District Logo" />
+                <img src={"/logos/DistrictLogo.png"} className={classes.logo} alt="District Logo"/>
                 <span>
                     {message}
                 </span>
@@ -59,3 +59,5 @@ export default function Maintenance({ message }: Props) {
         </Container>
     );
 }
+
+export default Maintenance;
