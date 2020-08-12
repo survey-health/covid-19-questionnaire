@@ -14,7 +14,7 @@ If you are interested in a turnkey solution, visit https://www.soliantconsulting
 ## Setup
 
 * If you are running a development copy (npm start) update .env.development to point to your api server
-* if you are running a production copy (npm run build) update .env.production to point to your api server
+* if you are running a production copy (npm run build) copy .env.production.dist to .env.production and update .env.production to point to your api server
 
 ## Development
 
