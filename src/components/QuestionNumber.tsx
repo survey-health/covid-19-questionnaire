@@ -6,32 +6,40 @@ import {useStyles, Answer} from './GridQuestionnaire';
 type Props = {
     question : Question;
     setAnswerForQuestion : (answer : Answer) => void;
+    removeQuestionAnswer : (questionId : string) => void;
 };
 
-const QuestionNumber = ({question, setAnswerForQuestion} : Props) : ReactElement => {
+const QuestionNumber = ({question, setAnswerForQuestion, removeQuestionAnswer} : Props) : ReactElement => {
     const classes = useStyles();
     const [questionAnswer, setQuestionAnswer] = useState<string>('');
+    const [inValid, setInValid] = useState<boolean>(false);
     const setAnswer = (val : string) : void => {
+        setQuestionAnswer(val);
+        let invalidState = false;
+        const floatVal = parseFloat(val);
+        if (question.minValid !== undefined && question.maxValid !== undefined) {
+            invalidState = floatVal < question.minValid || floatVal > question.maxValid;
+            setInValid(invalidState);
+        }
+
+        if (invalidState) {
+            removeQuestionAnswer(question.id);
+            return;
+        }
+
         let unAcceptable = false;
 
         if (question.maxAcceptable !== undefined && question.minAcceptable !== undefined) {
-            unAcceptable = parseFloat(val) < question.minAcceptable || parseFloat(val) > question.maxAcceptable;
+            unAcceptable = floatVal < question.minAcceptable || floatVal > question.maxAcceptable;
         }
 
-        setQuestionAnswer(val);
         setAnswerForQuestion({
             questionId: question.id,
             yes: unAcceptable,
-            number: parseFloat(val),
+            number: floatVal,
             type: question.type
         });
     };
-
-    let inValid = false;
-
-    if (questionAnswer !== undefined && question.minValid !== undefined && question.maxValid !== undefined) {
-        inValid = parseFloat(questionAnswer) < question.minValid || parseFloat(questionAnswer) > question.maxValid;
-    }
 
     return (
         <>

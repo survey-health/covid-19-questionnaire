@@ -156,6 +156,14 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
         }
     }
 
+    const removeQuestionAnswer = (questionId : string) : void => {
+        setAnswers(
+            answers.filter((a : Answer) => {
+                return a.questionId !== questionId
+            })
+        );
+    }
+
     const handleConfirm = () => {
         setShowErrorMessage(false);
 
@@ -199,7 +207,8 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
     const questionOptions = questions.map((question) => {
         switch(question.type) {
         case NUMBER_TYPE:
-            return <QuestionNumber key={question.id} question={question} setAnswerForQuestion={setAnswerForQuestion}/>;
+            return <QuestionNumber key={question.id} question={question} setAnswerForQuestion={setAnswerForQuestion}
+                removeQuestionAnswer={removeQuestionAnswer}/>;
         default:
             return <QuestionYesNo key={question.id} question={question} setAnswerForQuestion={setAnswerForQuestion}/>;
         }
