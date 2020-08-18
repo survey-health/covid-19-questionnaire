@@ -1,4 +1,4 @@
-export const apiEndpoint = process.env.REACT_APP_API_ENDPOINT !== null ? process.env.REACT_APP_API_ENDPOINT : '';
+export const apiEndpoint = process.env.REACT_APP_API_ENDPOINT ?? '';
 
 export const apiFetch = async (url : string, init ? : RequestInit, jwt ?: string) : Promise<Response> => {
     if (!init) {
