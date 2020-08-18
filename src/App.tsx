@@ -7,6 +7,7 @@ import GridQuestionnaire from './components/GridQuestionnaire';
 import Maintenance from "./components/Maintenance";
 import SignIn from './components/SignIn';
 import SignInDob from './components/SignInDob';
+import SignInSaml from './components/SignInSaml';
 import Snackbars from './components/Snackbars';
 import {apiEndpoint, apiFetch} from './utils/api';
 
@@ -52,6 +53,29 @@ const App = () : ReactElement => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity] = useState<"success" | "info" | "warning" | "error" | undefined>('error');
     const [maintenance, setMaintenance] = useState<string | undefined>(process.env.REACT_APP_MAINTENANCE);
+
+    const getSamlToken = (async () : Promise<boolean> => {
+        try {
+            const url = new URL('/v1/login/sp/token', apiEndpoint);
+            const response = await apiFetch(
+                url.toString(),
+                {
+                    credentials: 'include'//needed to send cookies
+                }
+            );
+            const newToken = await response.text();
+
+            if (response.status !== 200 || newToken.length <= 0) {
+                return false;
+            }
+
+            setToken(newToken);
+            setAuthConfirmed(true);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    });
 
     const getUser = useCallback(async () => {
         setUser(null);
@@ -176,6 +200,7 @@ const App = () : ReactElement => {
             {maintenance && <Maintenance message={maintenance}/>}
             {displaySignIn('AD') && <SignIn signIn={signIn}/>}
             {displaySignIn('DOB') && <SignInDob signIn={signInDob}/>}
+            {displaySignIn('SAML') && <SignInSaml getSamlToken={getSamlToken} apiEndpoint={apiEndpoint}/>}
             <Snackbars severity={snackbarSeverity} open={snackbarOpen} setOpen={setSnackbarOpen} message={snackbarMessage}/>
             {(authConfirmed && user !== null && questionnaire !== null && !questionnaire.isComplete && undefined !== token && questions) && <GridQuestionnaire
                 userType={user.type}
