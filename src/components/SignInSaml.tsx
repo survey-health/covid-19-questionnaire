@@ -65,7 +65,7 @@ const SignInSaml = ({getSamlToken, apiEndpoint} : Props) : ReactElement => {
             break;
         }
         window.location.hash = "";
-    }, [setError]);
+    }, [setError, getSamlToken]);
 
     return (
         <Container component="main" maxWidth="xs">

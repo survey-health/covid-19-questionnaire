@@ -1,4 +1,3 @@
-
 import {Container} from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import React, {useCallback, useEffect, useState, ReactElement} from 'react';
@@ -9,6 +8,7 @@ import SignIn from './components/SignIn';
 import SignInDob from './components/SignInDob';
 import SignInSaml from './components/SignInSaml';
 import Snackbars from './components/Snackbars';
+import StudentList from './components/StudentList';
 import {apiEndpoint, apiFetch} from './utils/api';
 
 export type User = {
@@ -17,6 +17,7 @@ export type User = {
     type : string;
     schoolName : string;
     schoolId : string;
+    status ?: string;
 };
 
 export type Questionnaire = {
@@ -53,6 +54,44 @@ const App = () : ReactElement => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity] = useState<"success" | "info" | "warning" | "error" | undefined>('error');
     const [maintenance, setMaintenance] = useState<string | undefined>(process.env.REACT_APP_MAINTENANCE);
+
+    // USER_MODE = PARENT
+    const [students, setStudents] = useState<User[] | null>(null);
+    const [student, setStudent] = useState<User | null>(null);
+    const studentListMode = process.env.REACT_APP_USER_MODE === 'PARENT' && user?.type === 'guardian';
+    const getStudents = useCallback(async () => {
+        const url = new URL('/v1/user/getStudents', apiEndpoint);
+        const response = await apiFetch(url.href, {}, token)
+        const data = await response.json();
+
+        if (response.status !== 200) {
+            setSnackbarMessage('There was an error retrieving students for this user.');
+            setSnackbarOpen(true);
+            return;
+        }
+
+        setStudents(data);
+    }, [token]);
+
+    const updateStudentStatus = (updateStudent : User) => {
+        if (students !== null) {
+            const newStudents = students?.map(student => {
+                if (updateStudent.id === student.id) {
+                    student.status = 'Completed'
+                }
+
+                return student;
+            });
+
+            setStudents(newStudents);    
+        }
+    }
+
+    const logout = () => {
+        setToken(undefined);
+        setAuthConfirmed(false);
+        setUser(null);
+    }
 
     const getSamlToken = (async () : Promise<boolean> => {
         try {
@@ -142,7 +181,7 @@ const App = () : ReactElement => {
                     const data = await response.json();
                     setMaintenance(data.message);
                     return;
-                } catch (e) { 
+                } catch (e) {
                     console.log('error', e.message);
                 }
             }
@@ -157,8 +196,8 @@ const App = () : ReactElement => {
         setAuthConfirmed(true);
     }, []);
 
-    const getQuestionnaire = useCallback(async (type) => {
-        const url = new URL('/v1/' + type + '/getCurrentQuestionnaire', apiEndpoint);
+    const getQuestionnaire = useCallback(async (type : string, studentId ?: string) => {
+        const url = new URL('/v1/' + type + '/getCurrentQuestionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
         const response = await apiFetch(url.href, {}, token)
         const data = await response.json();
 
@@ -185,13 +224,27 @@ const App = () : ReactElement => {
     }, [token, getUser]);
 
     useEffect(() => {
-        if (user !== null) {
+        if (!studentListMode && user !== null) {
             getQuestionnaire(user.type);
         }
-    }, [user, getQuestionnaire]);
+
+        if (studentListMode && user !== null && student !== null) {
+            getQuestionnaire('student', student.id);
+        }
+    }, [user, getQuestionnaire, student, studentListMode]);
+
+    useEffect(() => {
+        if (studentListMode) {
+            getStudents();
+        }
+    }, [user, studentListMode, getStudents]);
 
     const displaySignIn = (method : string) : boolean => {
         return !maintenance && !authConfirmed && process.env.REACT_APP_AUTH_MODE === method;
+    }
+
+    if (studentListMode && students !== null && student === null) {
+        return <StudentList students={students} setStudent={setStudent} logout={logout}/>;
     }
 
     return (
@@ -202,7 +255,7 @@ const App = () : ReactElement => {
             {displaySignIn('DOB') && <SignInDob signIn={signInDob}/>}
             {displaySignIn('SAML') && <SignInSaml getSamlToken={getSamlToken} apiEndpoint={apiEndpoint}/>}
             <Snackbars severity={snackbarSeverity} open={snackbarOpen} setOpen={setSnackbarOpen} message={snackbarMessage}/>
-            {(authConfirmed && user !== null && questionnaire !== null && !questionnaire.isComplete && undefined !== token && questions) && <GridQuestionnaire
+            {(authConfirmed && !studentListMode && user !== null && questionnaire !== null && !questionnaire.isComplete && undefined !== token && questions) && <GridQuestionnaire
                 userType={user.type}
                 user={user}
                 setUser={setUser}
@@ -210,8 +263,26 @@ const App = () : ReactElement => {
                 setSnackbarMessage={setSnackbarMessage}
                 token={token}
                 questions={questions}
+                studentListMode={false}
+                updateStudentStatus={updateStudentStatus}
             />}
-            {(authConfirmed && user !== null && questionnaire !== null && questionnaire.isComplete) && <AlreadyCompletedDialog setUser={setUser}/>}
+            {(authConfirmed && studentListMode && user !== null && student !== null && questionnaire !== null && !questionnaire.isComplete && undefined !== token && questions) && <GridQuestionnaire
+                userType={'student'}
+                user={student}
+                setUser={setStudent}
+                setSnackbarOpen={setSnackbarOpen}
+                setSnackbarMessage={setSnackbarMessage}
+                token={token}
+                questions={questions}
+                studentListMode={studentListMode}
+                updateStudentStatus={updateStudentStatus}
+            />}
+            {(authConfirmed && user !== null && questionnaire !== null && questionnaire.isComplete) && <AlreadyCompletedDialog
+                setUser={setUser} 
+                setQuestionnaire={setQuestionnaire} 
+                studentListMode={studentListMode} 
+                setStudent={setStudent} 
+            />}
         </Container>
     );
 }
