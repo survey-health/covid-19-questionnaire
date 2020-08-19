@@ -73,11 +73,11 @@ const App = () : ReactElement => {
         setStudents(data);
     }, [token]);
 
-    const updateStudentStatus = (updateStudent : User) => {
+    const updateStudentStatus = (updateStudent : User, status : string) => {
         if (students !== null) {
             const newStudents = students?.map(student => {
                 if (updateStudent.id === student.id) {
-                    student.status = 'Completed'
+                    student.status = status
                 }
 
                 return student;

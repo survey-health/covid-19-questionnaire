@@ -128,7 +128,7 @@ type Props = {
     setSnackbarMessage : (snackbarMessage : string) => void;
     questions : Question[];
     studentListMode : boolean;
-    updateStudentStatus : (student : User) => void;
+    updateStudentStatus : (student : User, status : string) => void;
 };
 
 const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackbarMessage, token, questions, studentListMode, updateStudentStatus} : Props) : ReactElement => {
@@ -183,7 +183,7 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
             }
             
             if (studentListMode) {
-                updateStudentStatus(user);
+                updateStudentStatus(user, (hasYes ? 'Denied' : 'Approved'));
             }
         } else {
             setShowErrorMessage(true);
