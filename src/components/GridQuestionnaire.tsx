@@ -127,9 +127,11 @@ type Props = {
     setSnackbarOpen : (snackbarOpen : boolean) => void;
     setSnackbarMessage : (snackbarMessage : string) => void;
     questions : Question[];
+    studentListMode : boolean;
+    updateStudentStatus : (student : User, status : string) => void;
 };
 
-const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackbarMessage, token, questions} : Props) : ReactElement => {
+const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackbarMessage, token, questions, studentListMode, updateStudentStatus} : Props) : ReactElement => {
     const classes = useStyles();
 
     const [answers, setAnswers] = useState<Answer[]>([]);
@@ -168,7 +170,7 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
         setShowErrorMessage(false);
 
         if (answers.length === questions.length) {
-            updateQuestionnaire();
+            updateQuestionnaire(studentListMode ? user.id : '');
 
             const hasYes = answers.find((answer) => {
                 return answer.yes
@@ -179,6 +181,10 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
             } else {
                 setShowCheckedInDialog(true);
             }
+            
+            if (studentListMode) {
+                updateStudentStatus(user, (hasYes ? 'Denied' : 'Approved'));
+            }
         } else {
             setShowErrorMessage(true);
         }
@@ -188,8 +194,8 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
         setUser(null);
     }
 
-    const updateQuestionnaire = useCallback(async () => {
-        const url = new URL('/v1/' + userType + '/updateCurrentQuestionnaire/', apiEndpoint);
+    const updateQuestionnaire = useCallback(async (studentId ?: string) => {
+        const url = new URL('/v1/' + userType + '/updateCurrentQuestionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
 
         const response = await apiFetch(url.href, {
             method: 'PUT',
@@ -218,7 +224,8 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
         <Paper variant="outlined" className={classes.paper}>
             <div style={{textAlign: 'center'}}><img src={"/logos/SchoolLogo-" + user.schoolId + ".png"} className={classes.logo} alt="School or District Logo"/></div>
             <Typography variant={'h5'} className={classes.headerBold}>{user.name} ({user.id}) - {(new Date()).toLocaleDateString()}</Typography>
-            <Typography variant={'h5'} className={classes.headerBold}>Have you experienced any of the following?</Typography>
+            {!studentListMode && <Typography variant={'h5'} className={classes.headerBold}>Have you experienced any of the following?</Typography>}
+            {studentListMode && <Typography variant={'h5'} className={classes.headerBold}>Has your child experienced any of the following?</Typography>}
 
             <Grid container spacing={3}>
                 {questionOptions}

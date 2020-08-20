@@ -8,7 +8,7 @@ import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import React, {ReactElement} from 'react';
-import {User} from '../App';
+import {User, Questionnaire} from '../App';
 
 const theme = createMuiTheme({
     overrides: {
@@ -36,13 +36,21 @@ const useStyles = makeStyles({
 
 type Props = {
     setUser : (user : User | null) => void;
+    setStudent : (student : User | null) => void;
+    setQuestionnaire : (questionnaire : Questionnaire | null) => void;
+    studentListMode : boolean;
 };
 
-const AlreadyCompletedDialog = ({setUser} : Props) : ReactElement => {
+const AlreadyCompletedDialog = ({setUser, studentListMode, setQuestionnaire, setStudent} : Props) : ReactElement => {
     const classes = useStyles();
 
     const handleClose = () => {
-        setUser(null);
+        if (studentListMode) {
+            setQuestionnaire(null);
+            setStudent(null);
+        } else {
+            setUser(null);
+        }
     };
 
     return <Dialog

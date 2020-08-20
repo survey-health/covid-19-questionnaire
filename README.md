@@ -19,7 +19,8 @@ If you are interested in a turnkey solution, visit https://www.soliantconsulting
 ## Development
 
 To run a development copy of the React frontend first update .env.development to point to your api server and update 
-REACT_APP_AUTH_MODE to either AD or DOB to match the setting from the api.
+REACT_APP_AUTH_MODE to either SAML, AD or DOB to match the setting from the api.
+REACT_APP_USER_MODE to either STUDENT or PARENT to match the setting from the api.
 If you are running both on the same computer the default values should be fine.
 
 ### `npm start`
