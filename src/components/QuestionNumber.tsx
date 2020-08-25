@@ -1,7 +1,26 @@
 import {Grid, Typography, TextField} from '@material-ui/core';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, {useState, ReactElement} from 'react';
 import {Question} from '../App';
-import {useStyles, Answer} from './GridQuestionnaire';
+import {Answer} from './GridQuestionnaire';
+
+const useStyles = makeStyles(({
+    questionText: {
+        color: process.env.REACT_APP_THEME_QUESTION_TEXT_COLOR,
+    },
+    questionSubText: {
+        color: process.env.REACT_APP_THEME_QUESTION_TEXT_COLOR,
+    },
+    numberField: {
+        width: "100%",
+        "&:hover": {
+            borderColor: 'white',
+        },
+        "&:focus": {
+            borderColor: 'white',
+        },
+    },
+}));
 
 type Props = {
     question : Question;
@@ -47,10 +66,10 @@ const QuestionNumber = ({question, setAnswerForQuestion, removeQuestionAnswer} :
                 <Typography className={classes.questionText} variant={'h5'} align={'left'}>{question.number}. {question.text}</Typography>
                 {question.subText && <Typography className={classes.questionSubText}>{question.subText}</Typography>}
             </Grid>
-            <Grid item xs={12} sm={3} className={classes.buttons}>
+            <Grid item xs={12} sm={3}>
                 <TextField
                     variant="outlined"
-                    style={{width: "100%"}}
+                    className={classes.numberField}
                     error={inValid}
                     value={questionAnswer} 
                     onChange={e => setAnswer(e.target.value)}
