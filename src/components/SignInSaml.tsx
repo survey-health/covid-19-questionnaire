@@ -32,6 +32,7 @@ const useStyles = makeStyles(theme => ({
     signInButton: {
         margin: theme.spacing(3, 0, 2),
         lineHeight: 2.5,
+        backgroundColor: process.env.REACT_APP_THEME_BACKGROUND_COLOR,
     },
     errorText: {
         color: 'red',
