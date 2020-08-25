@@ -83,7 +83,7 @@ const App = () : ReactElement => {
                 return student;
             });
 
-            setStudents(newStudents);    
+            setStudents(newStudents);
         }
     }
 
@@ -239,6 +239,12 @@ const App = () : ReactElement => {
         }
     }, [user, studentListMode, getStudents]);
 
+    useEffect(() => {
+        if (process.env.REACT_APP_THEME_BACKGROUND_COLOR !== undefined) {
+            document.body.style.background = process.env.REACT_APP_THEME_BACKGROUND_COLOR;
+        }
+    }, []);
+
     const displaySignIn = (method : string) : boolean => {
         return !maintenance && !authConfirmed && process.env.REACT_APP_AUTH_MODE === method;
     }
@@ -278,10 +284,10 @@ const App = () : ReactElement => {
                 updateStudentStatus={updateStudentStatus}
             />}
             {(authConfirmed && user !== null && questionnaire !== null && questionnaire.isComplete) && <AlreadyCompletedDialog
-                setUser={setUser} 
-                setQuestionnaire={setQuestionnaire} 
-                studentListMode={studentListMode} 
-                setStudent={setStudent} 
+                setUser={setUser}
+                setQuestionnaire={setQuestionnaire}
+                studentListMode={studentListMode}
+                setStudent={setStudent}
             />}
         </Container>
     );

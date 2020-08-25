@@ -1,7 +1,48 @@
 import {Grid, Typography, Button, ButtonGroup} from '@material-ui/core';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, {useState, ReactElement} from 'react';
 import {Question} from '../App';
-import {useStyles, Answer} from './GridQuestionnaire';
+import {Answer} from './GridQuestionnaire';
+
+const useStyles = makeStyles(({
+    questionText: {
+        color: process.env.REACT_APP_THEME_QUESTION_TEXT_COLOR,
+    },
+    questionSubText: {
+        color: process.env.REACT_APP_THEME_QUESTION_TEXT_COLOR,
+    },
+    buttons: {
+        textAlign: 'right',
+    },
+    greyButtonNo: {
+        backgroundColor: '#C2C2C2',
+        color: 'white',
+        borderColor: 'white',
+        "&:hover": {
+            background: "#469077",
+            borderColor: 'white',
+        },
+    },
+    greyButtonYes: {
+        backgroundColor: '#C2C2C2',
+        color: 'white',
+        borderColor: 'white',
+        "&:hover": {
+            background: "#CD0004",
+            borderColor: 'white',
+        },
+    },
+    greenButton: {
+        backgroundColor: '#469077',
+        color: 'white',
+        borderColor: 'white',
+    },
+    redButton: {
+        backgroundColor: '#CD0004',
+        color: 'white',
+        borderColor: 'white',
+    },
+}));
 
 type Props = {
     question : Question;

@@ -33,32 +33,6 @@ export const useStyles = makeStyles(theme => ({
     buttonRow: {
         textAlign: 'center',
     },
-    greyButtonNo: {
-        backgroundColor: '#C2C2C2',
-        color: 'white',
-        borderColor: 'white',
-        "&:hover": {
-            background: "#469077"
-        },
-    },
-    greyButtonYes: {
-        backgroundColor: '#C2C2C2',
-        color: 'white',
-        borderColor: 'white',
-        "&:hover": {
-            background: "#CD0004"
-        },
-    },
-    redButton: {
-        backgroundColor: '#CD0004',
-        color: 'white',
-        borderColor: 'white',
-    },
-    greenButton: {
-        backgroundColor: '#469077',
-        color: 'white',
-        borderColor: 'white',
-    },
     paper: {
         marginTop: '32px',
         marginBottom: '32px',
@@ -67,14 +41,14 @@ export const useStyles = makeStyles(theme => ({
         backgroundColor: 'white',
     },
     cancelButton: {
-        backgroundColor: '#888888',
+        backgroundColor: process.env.REACT_APP_THEME_CANCEL_BUTTON_COLOR,
         color: 'white',
         lineHeight: 2.5,
         paddingRight: '1.75em',
         paddingLeft: '1.5em',
     },
     confirmButton: {
-        backgroundColor: '#468F76',
+        backgroundColor: process.env.REACT_APP_THEME_BACKGROUND_COLOR,
         color: 'white',
         marginLeft: '18px',
         lineHeight: 2.5,
