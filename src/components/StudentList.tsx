@@ -1,4 +1,4 @@
-import {Typography, Grid} from '@material-ui/core';
+import {Typography, Grid, Paper, Container} from '@material-ui/core';
 import {Theme, makeStyles} from '@material-ui/core/styles';
 import React, {ReactElement} from 'react';
 import {User} from '../App';
@@ -43,6 +43,15 @@ const useStyles = makeStyles((theme : Theme) => ({
         padding: '8px',
         backgroundColor: '#ababab',
     },
+    logo: {
+        maxHeight: '150px',
+    },
+    paper: {
+        marginTop: '32px',
+        marginBottom: '32px',
+        padding: '20px',
+        backgroundColor: 'white',
+    },
 }));
 
 type Props = {
@@ -53,11 +62,11 @@ type Props = {
 
 const StudentList = ({students, setStudent, logout} : Props) : ReactElement => {
     const classes = useStyles();
-    
+
     const studentList = students.map(student => {
-        return <div 
-            key={`student-id-${student.id}`} 
-            className={student.status === 'Not Completed' ? classes.studentRow : classes.studentRowComplete} 
+        return <div
+            key={`student-id-${student.id}`}
+            className={student.status === 'Not Completed' ? classes.studentRow : classes.studentRowComplete}
             onClick={() => {
                 if (student.status === 'Not Completed') {
                     setStudent(student)
@@ -69,19 +78,25 @@ const StudentList = ({students, setStudent, logout} : Props) : ReactElement => {
     });
 
     return (
-        <Grid container spacing={3} className={classes.grid}>
-            <Grid item sm={3} xs={12}/>
-            <Grid item sm={6} xs={12} className={classes.studentList}>
-                <div key={'student-id-header'}>
-                    <Typography className={classes.headerBold}>Please select a student from the list below:</Typography>
-                </div>
-                {studentList}
-                <div key={'student-id-footer'}>
-                    <Typography onClick={() => logout()} className={classes.footerBold}>Log out</Typography>
-                </div>
-            </Grid>
-            <Grid item sm={3} xs={12}/>
-        </Grid>
+        <Container component="main" maxWidth="md">
+            <Paper variant="outlined" className={classes.paper}>
+                <div style={{textAlign: 'center'}}><img src={"/logos/DistrictLogo.png"} className={classes.logo} alt="District Logo"/></div>
+
+                <Grid container spacing={3} className={classes.grid}>
+                    <Grid item sm={3} xs={12}/>
+                    <Grid item sm={6} xs={12} className={classes.studentList}>
+                        <div key={'student-id-header'}>
+                            <Typography className={classes.headerBold}>Please select a student from the list below:</Typography>
+                        </div>
+                        {studentList}
+                        <div key={'student-id-footer'}>
+                            <Typography onClick={() => logout()} className={classes.footerBold}>Log out</Typography>
+                        </div>
+                    </Grid>
+                    <Grid item sm={3} xs={12}/>
+                </Grid>
+            </Paper>
+        </Container>
     );
 }
 
