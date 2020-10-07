@@ -7,6 +7,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import React, {useState, ReactElement} from 'react';
+import {Trans} from 'react-i18next';
+import i18n from '../utils/I18n';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -62,12 +64,20 @@ const SignIn = ({signIn} : Props) : ReactElement => {
             <CssBaseline/>
             <Paper className={classes.paper}>
                 <Typography component="h1" variant="h5" style={{fontWeight: 700}}>
-                    COVID-19 Daily
+                    <Trans i18nKey="common.covid19Daily">
+                        COVID-19 Daily
+                    </Trans>
                 </Typography>
                 <Typography component="h1" variant="h5" style={{fontWeight: 700}}>
-                    Self-Certification Survey
+                    <Trans i18nKey="common.selfCertificationSurvey">
+                        Self-Certification Survey
+                    </Trans>
                 </Typography>
-                <img src={"/logos/DistrictLogo.png"} className={classes.logo} alt="District Logo"/>
+                <img
+                    src={"/logos/DistrictLogo.png"}
+                    className={classes.logo}
+                    alt={i18n.t('common.districtLogo', 'District Logo')}
+                />
                 <form className={classes.form} noValidate>
                     <TextField
                         variant="outlined"
@@ -75,7 +85,7 @@ const SignIn = ({signIn} : Props) : ReactElement => {
                         required
                         fullWidth
                         id="username"
-                        label="Username"
+                        label={i18n.t('signIn.username', 'Username')}
                         name="username"
                         autoComplete="username"
                         autoFocus
@@ -88,7 +98,7 @@ const SignIn = ({signIn} : Props) : ReactElement => {
                         required
                         fullWidth
                         name="password"
-                        label="Password"
+                        label={i18n.t('signIn.password', 'Password')}
                         type="password"
                         id="password"
                         autoComplete="current-password"
@@ -103,7 +113,9 @@ const SignIn = ({signIn} : Props) : ReactElement => {
                         className={classes.signInButton}
                         onClick={handleSignIn}
                     >
-                        Sign In
+                        <Trans i18nKey="signIn.signIn">
+                            Sign In
+                        </Trans>
                     </Button>
                 </form>
             </Paper>

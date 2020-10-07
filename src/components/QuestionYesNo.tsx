@@ -1,6 +1,7 @@
 import {Grid, Typography, Button, ButtonGroup} from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, {useState, ReactElement} from 'react';
+import {Trans} from 'react-i18next';
 import {Question} from '../App';
 import {Answer} from './GridQuestionnaire';
 
@@ -71,8 +72,16 @@ const QuestionYesNo = ({question, setAnswerForQuestion} : Props) : ReactElement 
             </Grid>
             <Grid item xs={12} sm={3} className={classes.buttons}>
                 <ButtonGroup color="primary" aria-label="outlined primary button group" fullWidth>
-                    <Button className={classes.greyButtonNo+ (questionAnswer === false ? ' ' + classes.greenButton : '')} onClick={() => changeYesNoAnswer(false)}>No</Button>
-                    <Button className={classes.greyButtonYes + (questionAnswer ? ' ' + classes.redButton : '')} onClick={() => changeYesNoAnswer(true)}>Yes</Button>
+                    <Button className={classes.greyButtonNo+ (questionAnswer === false ? ' ' + classes.greenButton : '')} onClick={() => changeYesNoAnswer(false)}>
+                        <Trans i18nKey="question.no">
+                            No
+                        </Trans>
+                    </Button>
+                    <Button className={classes.greyButtonYes + (questionAnswer ? ' ' + classes.redButton : '')} onClick={() => changeYesNoAnswer(true)}>
+                        <Trans i18nKey="question.yes">
+                            Yes
+                        </Trans>
+                    </Button>
                 </ButtonGroup>
             </Grid>
         </>

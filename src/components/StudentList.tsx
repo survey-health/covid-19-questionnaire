@@ -1,7 +1,9 @@
 import {Typography, Grid, Paper, Container} from '@material-ui/core';
 import {Theme, makeStyles} from '@material-ui/core/styles';
 import React, {ReactElement} from 'react';
+import {Trans} from 'react-i18next';
 import {User} from '../App';
+import i18n from '../utils/I18n';
 
 const useStyles = makeStyles((theme : Theme) => ({
     root: {
@@ -80,17 +82,31 @@ const StudentList = ({students, setStudent, logout} : Props) : ReactElement => {
     return (
         <Container component="main" maxWidth="md">
             <Paper variant="outlined" className={classes.paper}>
-                <div style={{textAlign: 'center'}}><img src={"/logos/DistrictLogo.png"} className={classes.logo} alt="District Logo"/></div>
+                <div style={{textAlign: 'center'}}>
+                    <img
+                        src={"/logos/DistrictLogo.png"}
+                        className={classes.logo}
+                        alt={i18n.t('common.districtLogo', 'District Logo')}
+                    />
+                </div>
 
                 <Grid container spacing={3} className={classes.grid}>
                     <Grid item sm={3} xs={12}/>
                     <Grid item sm={6} xs={12} className={classes.studentList}>
                         <div key={'student-id-header'}>
-                            <Typography className={classes.headerBold}>Please select a student from the list below:</Typography>
+                            <Typography className={classes.headerBold}>
+                                <Trans i18nKey="studentList.pleaseSelectStudent">
+                                    Please select a student from the list below:
+                                </Trans>
+                            </Typography>
                         </div>
                         {studentList}
                         <div key={'student-id-footer'}>
-                            <Typography onClick={() => logout()} className={classes.footerBold}>Log out</Typography>
+                            <Typography onClick={() => logout()} className={classes.footerBold}>
+                                <Trans i18nKey="common.logOut">
+                                    Log out
+                                </Trans>
+                            </Typography>
                         </div>
                     </Grid>
                     <Grid item sm={3} xs={12}/>
