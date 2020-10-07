@@ -61,7 +61,7 @@ const App = () : ReactElement => {
     const [student, setStudent] = useState<User | null>(null);
     const studentListMode = process.env.REACT_APP_USER_MODE === 'PARENT' && user?.type === 'guardian';
     const getStudents = useCallback(async () => {
-        const url = new URL('/v1/user/getStudents', apiEndpoint);
+        const url = new URL('/v1/user/get-students', apiEndpoint);
         const response = await apiFetch(url.href, {}, token)
         const data = await response.json();
 
@@ -216,7 +216,7 @@ const App = () : ReactElement => {
     }, []);
 
     const getQuestionnaire = useCallback(async (type : string, studentId ?: string) => {
-        const url = new URL('/v1/' + type + '/getCurrentQuestionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
+        const url = new URL('/v1/' + type + '/get-current-questionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
         const response = await apiFetch(url.href, {}, token)
         const data = await response.json();
 

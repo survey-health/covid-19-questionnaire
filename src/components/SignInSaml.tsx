@@ -1,11 +1,10 @@
-
 import {Grid, Paper} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import React, {useState, ReactElement, useEffect} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import {Trans} from 'react-i18next';
 import i18n from '../utils/I18n';
 

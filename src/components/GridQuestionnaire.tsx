@@ -174,7 +174,7 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
     }
 
     const updateQuestionnaire = useCallback(async (studentId ?: string) => {
-        const url = new URL('/v1/' + userType + '/updateCurrentQuestionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
+        const url = new URL('/v1/' + userType + '/update-current-questionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
 
         const response = await apiFetch(url.href, {
             method: 'PUT',
