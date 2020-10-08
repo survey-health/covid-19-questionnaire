@@ -1,8 +1,10 @@
 import {Button, Grid, Paper, Typography} from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, {useCallback, useState, ReactElement} from 'react';
+import {Trans} from 'react-i18next';
 import {Question, User} from '../App';
 import {apiEndpoint, apiFetch} from '../utils/api';
+import i18n from '../utils/I18n';
 import CheckedInDialog from './CheckedInDialog';
 import QuestionNumber from "./QuestionNumber";
 import QuestionYesNo from "./QuestionYesNo";
@@ -155,9 +157,12 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
             } else {
                 setShowCheckedInDialog(true);
             }
-            
+
             if (studentListMode) {
-                updateStudentStatus(user, (hasYes ? 'Denied' : 'Approved'));
+                updateStudentStatus(
+                    user,
+                    (hasYes ? i18n.t('common.denied', 'Denied') : i18n.t('common.approved', 'Approved'))
+                );
             }
         } else {
             setShowErrorMessage(true);
@@ -169,7 +174,7 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
     }
 
     const updateQuestionnaire = useCallback(async (studentId ?: string) => {
-        const url = new URL('/v1/' + userType + '/updateCurrentQuestionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
+        const url = new URL('/v1/' + userType + '/update-current-questionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
 
         const response = await apiFetch(url.href, {
             method: 'PUT',
@@ -180,7 +185,12 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
 
         if (response.status !== 204) {
             setSnackbarOpen(true);
-            setSnackbarMessage('There was an error processing your request.');
+            setSnackbarMessage(
+                i18n.t(
+                    'gridQuestionnaire.errorProcessingRequest',
+                    'There was an error processing your request.'
+                )
+            );
         }
     }, [answers, setSnackbarMessage, setSnackbarOpen, userType, token]);
 
@@ -196,26 +206,46 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
 
     return (
         <Paper variant="outlined" className={classes.paper}>
-            <div style={{textAlign: 'center'}}><img src={"/logos/SchoolLogo-" + user.schoolId + ".png"} className={classes.logo} alt="School or District Logo"/></div>
+            <div style={{textAlign: 'center'}}>
+                <img
+                    src={"/logos/SchoolLogo-" + user.schoolId + ".png"}
+                    className={classes.logo}
+                    alt={i18n.t('common.schoolOrDistrictLogo', 'School or District Logo')}
+                />
+            </div>
             <Typography variant={'h5'} className={classes.headerBold}>{user.name} ({user.id}) - {(new Date()).toLocaleDateString()}</Typography>
-            {!studentListMode && <Typography variant={'h5'} className={classes.headerBold}>Have you experienced any of the following?</Typography>}
-            {studentListMode && <Typography variant={'h5'} className={classes.headerBold}>Has your child experienced any of the following?</Typography>}
+            {!studentListMode && <Typography variant={'h5'} className={classes.headerBold}>
+                <Trans i18nKey="gridQuestionnaire.haveYouExperienced">
+                    Have you experienced any of the following?
+                </Trans>
+            </Typography>}
+            {studentListMode && <Typography variant={'h5'} className={classes.headerBold}>
+                <Trans i18nKey="gridQuestionnaire.hasYourChildExperienced">
+                    Has your child experienced any of the following?
+                </Trans>
+            </Typography>}
 
             <Grid container spacing={3}>
                 {questionOptions}
                 {showErrorMessage && <Grid item xs={12}>
                     <Typography className={classes.errorText} variant={'h5'} align={'center'}>
-                        Please answer all {questions.length} questions.
+                        <Trans i18nKey="gridQuestionnaire.pleaseAnswerQuestions" count={questions.length}>
+                            Please answer all {questions.length} questions.
+                        </Trans>
                     </Typography>
                 </Grid>}
                 <Grid item xs={12} className={classes.buttonRow}>
                     <Button className={classes.cancelButton} variant="contained" disableElevation
                         onClick={handleCancel}>
-                        Cancel
+                        <Trans i18nKey="common.cancel">
+                            Cancel
+                        </Trans>
                     </Button>
                     <Button className={classes.confirmButton} variant="contained" disableElevation
                         onClick={handleConfirm}>
-                        Confirm
+                        <Trans i18nKey="common.confirm">
+                            Confirm
+                        </Trans>
                     </Button>
                 </Grid>
             </Grid>

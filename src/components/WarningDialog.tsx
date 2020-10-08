@@ -8,6 +8,7 @@ import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import React, {ReactElement} from 'react';
+import {Trans} from 'react-i18next';
 import {User} from '../App';
 
 const theme = createMuiTheme({
@@ -51,15 +52,19 @@ const WarningDialog = ({user, open, setOpen, setUser} : Props) : ReactElement =>
 
     const getErrorMessage = (user : User) => {
         const doNotAttend = <Typography style={{textAlign: "center"}}>
-            Based on your responses, you <strong>should not</strong>{" "}
-            attend school today.
+            <Trans i18nKey="warning.doNotAttend">
+                Based on your responses, you <strong>should not</strong>{" "}
+                attend school today.
+            </Trans>
         </Typography>
         if (user.type === "student") {
             return (
                 <React.Fragment>
                     {doNotAttend}
                     <Typography style={{textAlign: "center"}}>
-                        Please contact the school nurse's office.
+                        <Trans i18nKey="warning.pleaseContactSchoolNurseOffice">
+                            Please contact the school nurse's office.
+                        </Trans>
                     </Typography>
                 </React.Fragment>
             );
@@ -68,7 +73,9 @@ const WarningDialog = ({user, open, setOpen, setUser} : Props) : ReactElement =>
         return <React.Fragment>
             {doNotAttend}
             <Typography style={{textAlign: "center"}}>
-                Please contact your supervisor, and coordinate a substitute if needed.
+                <Trans i18nKey="warning.pleaseContactSupervisor">
+                    Please contact your supervisor, and coordinate a substitute if needed.
+                </Trans>
             </Typography>
         </React.Fragment>;
     };
@@ -86,7 +93,11 @@ const WarningDialog = ({user, open, setOpen, setUser} : Props) : ReactElement =>
         maxWidth="md"
         fullWidth
     >
-        <DialogTitle id="alert-dialog-title" style={{textAlign: 'center', fontWeight: 700}} disableTypography>Warning</DialogTitle>
+        <DialogTitle id="alert-dialog-title" style={{textAlign: 'center', fontWeight: 700}} disableTypography>
+            <Trans i18nKey="warning.title">
+                Warning
+            </Trans>
+        </DialogTitle>
         <DialogContent style={{overflow: "hidden"}}>
             <Grid container spacing={3}>
                 <Grid item sm={2} xs={12} style={{textAlign: 'center'}}>
@@ -104,7 +115,11 @@ const WarningDialog = ({user, open, setOpen, setUser} : Props) : ReactElement =>
         </DialogContent>
         <DialogActions style={{justifyContent: 'center'}}>
             <MuiThemeProvider theme={theme}>
-                <Button onClick={handleClose} disableRipple>Ok</Button>
+                <Button onClick={handleClose} disableRipple>
+                    <Trans i18nKey="common.ok">
+                        Ok
+                    </Trans>
+                </Button>
             </MuiThemeProvider>
         </DialogActions>
     </Dialog>;

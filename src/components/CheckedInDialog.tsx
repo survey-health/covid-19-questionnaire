@@ -8,6 +8,7 @@ import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import React, {ReactElement} from 'react';
+import {Trans} from 'react-i18next';
 import {User} from '../App';
 
 const theme = createMuiTheme({
@@ -61,15 +62,32 @@ const CheckedInDialog = ({open, setOpen, setUser} : Props) : ReactElement => {
         maxWidth="md"
         fullWidth
     >
-        <DialogTitle id="alert-dialog-title" style={{textAlign: 'center'}} disableTypography><Typography variant={'h6'} style={{fontWeight: 700}}>Check In Confirmed</Typography></DialogTitle>
+        <DialogTitle id="alert-dialog-title" style={{textAlign: 'center'}} disableTypography>
+            <Typography variant={'h6'} style={{fontWeight: 700}}>
+                <Trans i18nKey="checkedIn.title">
+                    Check In Confirmed
+                </Trans>
+            </Typography>
+        </DialogTitle>
         <DialogContent style={{overflow: "hidden"}}>
             <Grid container spacing={3}>
                 <Grid item sm={2} xs={12} style={{textAlign: 'center'}}>
                     <CheckCircleIcon style={{height: '80px', width: '80px'}}/>
                 </Grid>
                 <Grid item sm={8} xs={12} style={{textAlign: 'center'}}>
-                    <Typography style={{textAlign: 'center'}}>Thank you for completing the health questionnaire. <br/></Typography>
-                    <Typography style={{textAlign: 'center'}}>We look forward to seeing you at school today!</Typography>
+                    <Typography style={{textAlign: 'center'}}>
+                        <Trans i18nKey="alreadyCompleted.title">
+                            <Trans i18nKey="checkedIn.thankYou">
+                                Thank you for completing the health questionnaire.
+                            </Trans>
+                        </Trans>
+                        <br/>
+                    </Typography>
+                    <Typography style={{textAlign: 'center'}}>
+                        <Trans i18nKey="checkedIn.lookingForward">
+                            We look forward to seeing you at school today!
+                        </Trans>
+                    </Typography>
                 </Grid>
                 <Hidden xsDown>
                     <Grid item sm={2} xs={12} style={{textAlign: 'center'}}>
@@ -80,7 +98,11 @@ const CheckedInDialog = ({open, setOpen, setUser} : Props) : ReactElement => {
         </DialogContent>
         <DialogActions style={{justifyContent: 'center'}}>
             <MuiThemeProvider theme={theme}>
-                <Button onClick={handleClose} disableRipple>Ok</Button>
+                <Button onClick={handleClose} disableRipple>
+                    <Trans i18nKey="common.ok">
+                        Ok
+                    </Trans>
+                </Button>
             </MuiThemeProvider>
         </DialogActions>
     </Dialog>;

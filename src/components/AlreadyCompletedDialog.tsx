@@ -4,11 +4,12 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import React, {ReactElement} from 'react';
-import {User, Questionnaire} from '../App';
+import {Trans} from 'react-i18next';
+import {Questionnaire, User} from '../App';
 
 const theme = createMuiTheme({
     overrides: {
@@ -66,14 +67,24 @@ const AlreadyCompletedDialog = ({setUser, studentListMode, setQuestionnaire, set
         maxWidth="md"
         fullWidth
     >
-        <DialogTitle id="alert-dialog-title" style={{textAlign: 'center'}} disableTypography><Typography variant={'h6'} style={{fontWeight: 700}}>Warning</Typography></DialogTitle>
+        <DialogTitle id="alert-dialog-title" style={{textAlign: 'center'}} disableTypography>
+            <Typography variant={'h6'} style={{fontWeight: 700}}>
+                <Trans i18nKey="alreadyCompleted.title">
+                    Warning
+                </Trans>
+            </Typography>
+        </DialogTitle>
         <DialogContent style={{overflow: "hidden"}}>
             <Grid container spacing={3}>
                 <Grid item sm={2} xs={12} style={{textAlign: 'center'}}>
                     <NotInterestedIcon style={{height: '80px', width: '80px'}}/>
                 </Grid>
                 <Grid item sm={8} xs={12} style={{textAlign: 'center'}}>
-                    <Typography style={{textAlign: 'center'}}>You have already filled out a form for today.</Typography>
+                    <Typography style={{textAlign: 'center'}}>
+                        <Trans i18nKey="alreadyCompleted.description">
+                            You have already filled out a form for today.
+                        </Trans>
+                    </Typography>
                 </Grid>
                 <Hidden xsDown>
                     <Grid item sm={2} xs={12} style={{textAlign: 'center'}}>
@@ -84,7 +95,11 @@ const AlreadyCompletedDialog = ({setUser, studentListMode, setQuestionnaire, set
         </DialogContent>
         <DialogActions style={{justifyContent: 'center'}}>
             <MuiThemeProvider theme={theme}>
-                <Button onClick={handleClose} disableRipple>Ok</Button>
+                <Button onClick={handleClose} disableRipple>
+                    <Trans i18nKey="common.ok">
+                        Ok
+                    </Trans>
+                </Button>
             </MuiThemeProvider>
         </DialogActions>
     </Dialog>;

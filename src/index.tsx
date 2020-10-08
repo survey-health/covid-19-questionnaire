@@ -1,14 +1,18 @@
+import React from 'react';
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
-import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import {I18nextProvider} from 'react-i18next';
 import App from './App';
+import './index.css';
 import * as serviceWorker from './serviceWorker';
+import i18n from './utils/I18n';
 
 ReactDOM.render(
     <React.StrictMode>
-        <App/>
+        <I18nextProvider i18n={i18n}>
+            <App/>
+        </I18nextProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

@@ -1,6 +1,6 @@
 import {Container} from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import React, {useCallback, useEffect, useState, ReactElement} from 'react';
+import React, {ReactElement, useCallback, useEffect, useState} from 'react';
 import AlreadyCompletedDialog from './components/AlreadyCompletedDialog';
 import GridQuestionnaire from './components/GridQuestionnaire';
 import Maintenance from "./components/Maintenance";
@@ -10,6 +10,7 @@ import SignInSaml from './components/SignInSaml';
 import Snackbars from './components/Snackbars';
 import StudentList from './components/StudentList';
 import {apiEndpoint, apiFetch} from './utils/api';
+import i18n from './utils/I18n';
 
 export type User = {
     id : string;
@@ -60,12 +61,17 @@ const App = () : ReactElement => {
     const [student, setStudent] = useState<User | null>(null);
     const studentListMode = process.env.REACT_APP_USER_MODE === 'PARENT' && user?.type === 'guardian';
     const getStudents = useCallback(async () => {
-        const url = new URL('/v1/user/getStudents', apiEndpoint);
+        const url = new URL('/v1/user/get-students', apiEndpoint);
         const response = await apiFetch(url.href, {}, token)
         const data = await response.json();
 
         if (response.status !== 200) {
-            setSnackbarMessage('There was an error retrieving students for this user.');
+            setSnackbarMessage(
+                i18n.t(
+                    'app.errorLoadingStudent',
+                    'There was an error retrieving students for this user.'
+                )
+            );
             setSnackbarOpen(true);
             return;
         }
@@ -132,7 +138,12 @@ const App = () : ReactElement => {
                 return;
             }
 
-            setSnackbarMessage('There was an error retrieving the user.');
+            setSnackbarMessage(
+                i18n.t(
+                    'app.errorLoadingUser',
+                    'There was an error retrieving the user.'
+                )
+            );
             setSnackbarOpen(true);
             return;
         }
@@ -153,7 +164,11 @@ const App = () : ReactElement => {
         })
 
         if (response.status !== 200) {
-            setSnackbarMessage(response.status === 401 ? 'Invalid id or date of birth.' : 'There was an error signing you in.');
+            setSnackbarMessage(
+                response.status === 401
+                    ? i18n.t('app.invalidIdOrDob', 'Invalid id or date of birth.')
+                    : i18n.t('app.errorSigningIn', 'There was an error signing you in.')
+            );
             setSnackbarOpen(true);
             return;
         }
@@ -185,7 +200,11 @@ const App = () : ReactElement => {
                     console.log('error', e.message);
                 }
             }
-            setSnackbarMessage(response.status === 401 ? 'Invalid id or date of birth.' : 'There was an error signing you in.');
+            setSnackbarMessage(
+                response.status === 401
+                    ? i18n.t('app.invalidIdOrDob', 'Invalid id or date of birth.')
+                    : i18n.t('app.errorSigningIn', 'There was an error signing you in.')
+            );
             setSnackbarOpen(true);
             return;
         }
@@ -197,12 +216,17 @@ const App = () : ReactElement => {
     }, []);
 
     const getQuestionnaire = useCallback(async (type : string, studentId ?: string) => {
-        const url = new URL('/v1/' + type + '/getCurrentQuestionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
+        const url = new URL('/v1/' + type + '/get-current-questionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
         const response = await apiFetch(url.href, {}, token)
         const data = await response.json();
 
         if (response.status !== 201) {
-            setSnackbarMessage('There was an error retrieving the questionnaire.');
+            setSnackbarMessage(
+                i18n.t(
+                    'app.errorLoadingQuestionnaire',
+                    'There was an error retrieving the questionnaire.'
+                )
+            );
             setSnackbarOpen(true);
             return;
         }

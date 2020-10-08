@@ -1,0 +1,57 @@
+{
+    "app": {
+        "errorLoadingStudent": "There was an error retrieving students for this user.",
+        "errorLoadingUser": "There was an error retrieving the user.",
+        "invalidIdOrDob": "Invalid id or date of birth.",
+        "errorSigningIn": "There was an error signing you in.",
+        "errorLoadingQuestionnaire": "There was an error retrieving the questionnaire."
+    },
+    "alreadyCompleted": {
+        "title": "Warning",
+        "description": "You have already filled out a form for today."
+    },
+    "checkedIn": {
+        "title": "Check In Confirmed",
+        "thankYou": "Thank you for completing the health questionnaire.",
+        "lookingForward": "We look forward to seeing you at school today!"
+    },
+    "gridQuestionnaire": {
+        "haveYouExperienced": "Have you experienced any of the following?",
+        "hasYourChildExperienced": "Has your child experienced any of the following?",
+        "pleaseAnswerQuestions": "Please answer all {{count}} questions.",
+        "errorProcessingRequest": "There was an error processing your request."
+    },
+    "question": {
+        "yes": "Yes",
+        "no": "No"
+    },
+    "studentList": {
+        "pleaseSelectStudent": "Please select a student from the list below:"
+    },
+    "warning": {
+        "title": "Warning",
+        "pleaseContactSchoolNurseOffice": "Please contact the school nurse's office.",
+        "pleaseContactSupervisor": "Please contact your supervisor, and coordinate a substitute if needed.",
+        "doNotAttend": "Based on your responses, you <strong>should not</strong> attend school today."
+    },
+    "signIn": {
+        "username": "Username",
+        "password": "Password",
+        "idNumber": "ID Number",
+        "dob": "DOB",
+        "signIn": "Sign In",
+        "error": "There was a error logging you in. (e:{{errorCode}})"
+    },
+    "common": {
+        "covid19Daily": "COVID-19 Daily",
+        "selfCertificationSurvey": "Self-Certification Survey",
+        "logOut": "Log out",
+        "ok": "Ok",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "denied": "Denied",
+        "approved": "Approved",
+        "schoolOrDistrictLogo": "School or District Logo",
+        "districtLogo": "District Logo"
+    }
+}
