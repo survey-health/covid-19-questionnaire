@@ -13,7 +13,7 @@
     "checkedIn": {
         "title": "Registro confirmado",
         "thankYou": "Gracias por completar el cuestionario de salud.",
-        "lookingForward": "¡Esperamos verlo hoy en la escuela!"
+        "lookingForward": "¡Esperamos verte hoy en la escuela! Por favor recuerde: ¡Debe usar su máscara cubrebocas, lávese las manos y cuide su distancia!"
     },
     "gridQuestionnaire": {
         "haveYouExperienced": "¿Ha experimentado alguno de los siguientes?",
@@ -30,9 +30,9 @@
     },
     "warning": {
         "title": "Advertencia",
-        "pleaseContactSchoolNurseOffice": "Comuníquese con la oficina de la enfermera de la escuela.",
-        "pleaseContactSupervisor": "Comuníquese con su supervisor y coordine un sustituto si es necesario.",
-        "doNotAttend": "Según sus respuestas, no debería asistir a la escuela hoy."
+        "pleaseContactSchoolNurseOffice": "Estudiante: Por favor informe a la enfermera de su escuela e ingrese la ausencia por enfermedad en Infinite Campus.",
+        "pleaseContactSupervisor": "Miembro del Personal: Por favor informe a su supervisor de inmediato y comuníquese con el Departamento de Recursos Humanos para determinar los próximos pasos al 224-242-0456 o chedges@barrington220.org.",
+        "doNotAttend": "Según sus respuestas, su hijo(a)/usted no debería asistir a la escuela hoy."
     },
     "signIn": {
         "username": "Nombre de usuario",

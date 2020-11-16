@@ -53,8 +53,7 @@ const WarningDialog = ({user, open, setOpen, setUser} : Props) : ReactElement =>
     const getErrorMessage = (user : User) => {
         const doNotAttend = <Typography style={{textAlign: "center"}}>
             <Trans i18nKey="warning.doNotAttend">
-                Based on your responses, you <strong>should not</strong>{" "}
-                attend school today.
+                Based on your responses, your child/you <strong>should not</strong>{" "} attend school today.
             </Trans>
         </Typography>
         if (user.type === "student") {
@@ -63,7 +62,7 @@ const WarningDialog = ({user, open, setOpen, setUser} : Props) : ReactElement =>
                     {doNotAttend}
                     <Typography style={{textAlign: "center"}}>
                         <Trans i18nKey="warning.pleaseContactSchoolNurseOffice">
-                            Please contact the school nurse's office.
+                            Please inform your school’s nurse and enter the illness absence into Infinite Campus.
                         </Trans>
                     </Typography>
                 </React.Fragment>
@@ -74,7 +73,7 @@ const WarningDialog = ({user, open, setOpen, setUser} : Props) : ReactElement =>
             {doNotAttend}
             <Typography style={{textAlign: "center"}}>
                 <Trans i18nKey="warning.pleaseContactSupervisor">
-                    Please contact your supervisor, and coordinate a substitute if needed.
+                    Please inform your supervisor immediately and reach out to HR to determine next steps at 224-242-0456 or chedges@barrington220.org.
                 </Trans>
             </Typography>
         </React.Fragment>;

@@ -85,7 +85,7 @@ const CheckedInDialog = ({open, setOpen, setUser} : Props) : ReactElement => {
                     </Typography>
                     <Typography style={{textAlign: 'center'}}>
                         <Trans i18nKey="checkedIn.lookingForward">
-                            We look forward to seeing you at school today!
+                            We look forward to seeing you at school today! Please remember: Wear your mask, wash your hands, and watch your distance!
                         </Trans>
                     </Typography>
                 </Grid>
