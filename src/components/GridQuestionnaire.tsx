@@ -5,6 +5,7 @@ import {Trans} from 'react-i18next';
 import {Question, User} from '../App';
 import {apiEndpoint, apiFetch} from '../utils/api';
 import i18n from '../utils/I18n';
+import ChangeLanguage from "./ChangeLanguage";
 import CheckedInDialog from './CheckedInDialog';
 import QuestionNumber from "./QuestionNumber";
 import QuestionYesNo from "./QuestionYesNo";
@@ -105,9 +106,22 @@ type Props = {
     questions : Question[];
     studentListMode : boolean;
     updateStudentStatus : (student : User, status : string) => void;
+    onLanguageChange : (lang : string) => void;
 };
 
-const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackbarMessage, token, questions, studentListMode, updateStudentStatus} : Props) : ReactElement => {
+const GridQuestionnaire = (
+    {
+        user,
+        setUser,
+        userType,
+        setSnackbarOpen,
+        setSnackbarMessage,
+        token,
+        questions,
+        studentListMode,
+        updateStudentStatus,
+        onLanguageChange
+    } : Props) : ReactElement => {
     const classes = useStyles();
 
     const [answers, setAnswers] = useState<Answer[]>([]);
@@ -249,6 +263,7 @@ const GridQuestionnaire = ({user, setUser, userType, setSnackbarOpen, setSnackba
                     </Button>
                 </Grid>
             </Grid>
+            <ChangeLanguage onChange={onLanguageChange}/>
             <WarningDialog user={user} open={showWarningDialog} setOpen={setShowWarningDialog} setUser={setUser}/>
             <CheckedInDialog open={showCheckedInDialog}
                 setOpen={setShowCheckedInDialog} setUser={setUser}/>

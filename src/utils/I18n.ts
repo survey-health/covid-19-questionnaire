@@ -23,4 +23,14 @@ i18n
         },
     });
 
+const lang = localStorage.getItem('translation-lastLang');
+if (lang) {
+    i18n.changeLanguage(lang);
+}
+
+export const changeLanguage = (lang : string) : void => {
+    localStorage.setItem('translation-lastLang', lang);
+    i18n.changeLanguage(lang);
+}
+
 export default i18n;

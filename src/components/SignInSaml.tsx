@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import React, {ReactElement, useEffect, useState} from 'react';
 import {Trans} from 'react-i18next';
 import i18n from '../utils/I18n';
+import ChangeLanguage from './ChangeLanguage'
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -43,9 +44,10 @@ const useStyles = makeStyles(theme => ({
 type Props = {
     getSamlToken : () => Promise<boolean>;
     apiEndpoint : string;
+    onLanguageChange : (lang : string) => void;
 };
 
-const SignInSaml = ({getSamlToken, apiEndpoint} : Props) : ReactElement => {
+const SignInSaml = ({getSamlToken, apiEndpoint, onLanguageChange} : Props) : ReactElement => {
     const classes = useStyles();
     const [error, setError] = useState('');
 
@@ -113,6 +115,7 @@ const SignInSaml = ({getSamlToken, apiEndpoint} : Props) : ReactElement => {
                         </Trans>
                     </Button>
                 </form>
+                <ChangeLanguage onChange={onLanguageChange}/>
                 {error && <Grid item xs={12}>
                     <Typography className={classes.errorText} variant={'h5'} align={'center'}>
                         {error}

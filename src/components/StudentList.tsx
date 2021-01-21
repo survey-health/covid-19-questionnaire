@@ -4,6 +4,7 @@ import React, {ReactElement} from 'react';
 import {Trans} from 'react-i18next';
 import {User} from '../App';
 import i18n from '../utils/I18n';
+import ChangeLanguage from "./ChangeLanguage";
 
 const useStyles = makeStyles((theme : Theme) => ({
     root: {
@@ -60,24 +61,11 @@ type Props = {
     students : User[];
     setStudent : (student : User | null) => void;
     logout : () => void;
+    onLanguageChange : (lang : string) => void;
 };
 
-const StudentList = ({students, setStudent, logout} : Props) : ReactElement => {
+const StudentList = ({students, setStudent, logout, onLanguageChange} : Props) : ReactElement => {
     const classes = useStyles();
-
-    const studentList = students.map(student => {
-        return <div
-            key={`student-id-${student.id}`}
-            className={student.status === 'Not Completed' ? classes.studentRow : classes.studentRowComplete}
-            onClick={() => {
-                if (student.status === 'Not Completed') {
-                    setStudent(student)
-                }
-            }}
-        >
-            <Typography>{student.name} ({student.status})</Typography>
-        </div>
-    });
 
     return (
         <Container component="main" maxWidth="md">
@@ -100,7 +88,19 @@ const StudentList = ({students, setStudent, logout} : Props) : ReactElement => {
                                 </Trans>
                             </Typography>
                         </div>
-                        {studentList}
+                        {students.map(student => {
+                            return <div
+                                key={`student-id-${student.id}`}
+                                className={student.status === 'Not Completed' ? classes.studentRow : classes.studentRowComplete}
+                                onClick={() => {
+                                    if (student.status === 'Not Completed') {
+                                        setStudent(student)
+                                    }
+                                }}
+                            >
+                                <Typography>{student.name} ({student.status})</Typography>
+                            </div>
+                        })}
                         <div key={'student-id-footer'}>
                             <Typography onClick={() => logout()} className={classes.footerBold}>
                                 <Trans i18nKey="common.logOut">
@@ -111,6 +111,7 @@ const StudentList = ({students, setStudent, logout} : Props) : ReactElement => {
                     </Grid>
                     <Grid item sm={3} xs={12}/>
                 </Grid>
+                <ChangeLanguage onChange={onLanguageChange}/>
             </Paper>
         </Container>
     );

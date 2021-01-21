@@ -1,6 +1,7 @@
 import {Container} from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import React, {ReactElement, useCallback, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import AlreadyCompletedDialog from './components/AlreadyCompletedDialog';
 import GridQuestionnaire from './components/GridQuestionnaire';
 import Maintenance from "./components/Maintenance";
@@ -45,6 +46,17 @@ export type Question = {
     minValid ?: number;
 };
 
+const getQuestions = async (language : string, token : string) => {
+    const url = new URL('/v1/user/questions', apiEndpoint);
+    const init = {headers: new Headers({'Accept-Language': language})};
+    const questionsResponse = await apiFetch(url.toString(), init, token);
+    const questions = await questionsResponse.json();
+
+    if (questionsResponse.status === 200 && questions.length > 0) {
+        return questions;
+    }
+}
+
 const App = () : ReactElement => {
     const [user, setUser] = useState<User | null>(null);
     const [questions, setQuestions] = useState<Question[] | null>(null);
@@ -55,11 +67,19 @@ const App = () : ReactElement => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity] = useState<"success" | "info" | "warning" | "error" | undefined>('error');
     const [maintenance, setMaintenance] = useState<string | undefined>(process.env.REACT_APP_MAINTENANCE);
+    const {t} = useTranslation('ns1', {i18n});
 
     // USER_MODE = PARENT
     const [students, setStudents] = useState<User[] | null>(null);
     const [student, setStudent] = useState<User | null>(null);
     const studentListMode = process.env.REACT_APP_USER_MODE === 'PARENT' && user?.type === 'guardian';
+
+    const onLanguageChange = (langugage : string) : void => {
+        if (token) {
+            getQuestions(langugage, token).then((questions) => setQuestions(questions))
+        }
+    }
+
     const getStudents = useCallback(async () => {
         const url = new URL('/v1/user/get-students', apiEndpoint);
         const response = await apiFetch(url.href, {}, token)
@@ -123,16 +143,17 @@ const App = () : ReactElement => {
     });
 
     const getUser = useCallback(async () => {
+        if (!token) {
+            return;
+        }
         setUser(null);
 
-        let url = new URL('/v1/user/', apiEndpoint);
+        const url = new URL('/v1/user/', apiEndpoint);
         const response = await apiFetch(url.toString(), {}, token);
         const data = await response.json();
-        url = new URL('/v1/user/questions', apiEndpoint);
-        const questionsResponse = await apiFetch(url.toString(), {}, token);
-        const questions = await questionsResponse.json();
+        const questions = await getQuestions(i18n.language, token)
 
-        if (response.status !== 200 || data.length <= 0 || questionsResponse.status !== 200 || questions.length === 0) {
+        if (response.status !== 200 || data.length <= 0 || questions.length === 0) {
             if (response.status === 503) {
                 setMaintenance(data.message);
                 return;
@@ -274,7 +295,7 @@ const App = () : ReactElement => {
     }
 
     if (studentListMode && students !== null && student === null) {
-        return <StudentList students={students} setStudent={setStudent} logout={logout}/>;
+        return <StudentList students={students} setStudent={setStudent} logout={logout} onLanguageChange={onLanguageChange}/>;
     }
 
     return (
@@ -283,7 +304,7 @@ const App = () : ReactElement => {
             {maintenance && <Maintenance message={maintenance}/>}
             {displaySignIn('AD') && <SignIn signIn={signIn}/>}
             {displaySignIn('DOB') && <SignInDob signIn={signInDob}/>}
-            {displaySignIn('SAML') && <SignInSaml getSamlToken={getSamlToken} apiEndpoint={apiEndpoint}/>}
+            {displaySignIn('SAML') && <SignInSaml getSamlToken={getSamlToken} apiEndpoint={apiEndpoint} onLanguageChange={onLanguageChange}/>}
             <Snackbars severity={snackbarSeverity} open={snackbarOpen} setOpen={setSnackbarOpen} message={snackbarMessage}/>
             {(authConfirmed && !studentListMode && user !== null && questionnaire !== null && !questionnaire.isComplete && undefined !== token && questions) && <GridQuestionnaire
                 userType={user.type}
@@ -295,6 +316,7 @@ const App = () : ReactElement => {
                 questions={questions}
                 studentListMode={false}
                 updateStudentStatus={updateStudentStatus}
+                onLanguageChange={onLanguageChange}
             />}
             {(authConfirmed && studentListMode && user !== null && student !== null && questionnaire !== null && !questionnaire.isComplete && undefined !== token && questions) && <GridQuestionnaire
                 userType={'student'}
@@ -306,6 +328,7 @@ const App = () : ReactElement => {
                 questions={questions}
                 studentListMode={studentListMode}
                 updateStudentStatus={updateStudentStatus}
+                onLanguageChange={onLanguageChange}
             />}
             {(authConfirmed && user !== null && questionnaire !== null && questionnaire.isComplete) && <AlreadyCompletedDialog
                 setUser={setUser}
