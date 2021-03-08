@@ -67,12 +67,13 @@ const App = () : ReactElement => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity] = useState<"success" | "info" | "warning" | "error" | undefined>('error');
     const [maintenance, setMaintenance] = useState<string | undefined>(process.env.REACT_APP_MAINTENANCE);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {t} = useTranslation('ns1', {i18n});
 
     // USER_MODE = PARENT
     const [students, setStudents] = useState<User[] | null>(null);
     const [student, setStudent] = useState<User | null>(null);
-    const studentListMode = process.env.REACT_APP_USER_MODE === 'PARENT' && user?.type === 'guardian';
+    const studentListMode = user?.type === 'guardian';
 
     const onLanguageChange = (langugage : string) : void => {
         if (token) {
@@ -237,7 +238,7 @@ const App = () : ReactElement => {
     }, []);
 
     const getQuestionnaire = useCallback(async (type : string, studentId ?: string) => {
-        const url = new URL('/v1/' + type + '/get-current-questionnaire' + (studentId ? `/${studentId}` : ''), apiEndpoint);
+        const url = new URL('/v1/' + type + '/get-current-questionnaire/' + (studentId ? `${studentId}` : ''), apiEndpoint);
         const response = await apiFetch(url.href, {}, token)
         const data = await response.json();
 
